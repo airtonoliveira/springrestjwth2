@@ -1,4 +1,4 @@
-package br.com.airtondo.domain;
+package br.com.airton.domain;
 
 import java.io.Serializable;
 
@@ -14,6 +14,7 @@ public class Categoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	
 	private String nome;
 	
 	public Categoria() {
