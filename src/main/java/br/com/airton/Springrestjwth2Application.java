@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.com.airton.domain.Categoria;
 import br.com.airton.domain.Cidade;
+import br.com.airton.domain.Cliente;
+import br.com.airton.domain.Endereco;
 import br.com.airton.domain.Estado;
 import br.com.airton.domain.Produto;
+import br.com.airton.domain.enums.TipoCliente;
 import br.com.airton.repository.CategoriaRepository;
 import br.com.airton.repository.CidadeRepository;
+import br.com.airton.repository.ClienteRepository;
+import br.com.airton.repository.EnderecoRepository;
 import br.com.airton.repository.EstadoRepository;
 import br.com.airton.repository.ProdutoRepository;
 
@@ -27,6 +32,10 @@ public class Springrestjwth2Application implements CommandLineRunner{
 	private CidadeRepository cidadeRepository;
 	@Autowired
 	private EstadoRepository estadoRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Springrestjwth2Application.class, args);
@@ -63,6 +72,15 @@ public class Springrestjwth2Application implements CommandLineRunner{
 		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
+	
+		Cliente cli1 = new Cliente(null, "Maria", "maria@email.com", "0965142324", TipoCliente.PESSOAFISICA, null);
+		cli1.getTelefones().addAll(Arrays.asList("3882-0922","3456-9089"));
+		Endereco end1 = new Endereco(null, "RUA 1", "234", "s", "SP", "54420187", cli1, c1);
+		Endereco end2 = new Endereco(null, "RUA 2", "2342", "s2", "SP2", "544201872", cli1, c2);
+		cli1.getEnderecos().addAll(Arrays.asList(end1, end2));
+	
+		clienteRepository.save(cli1);
+		enderecoRepository.saveAll(Arrays.asList(end1,end2));
 	
 	}
 
