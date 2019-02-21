@@ -1,5 +1,6 @@
 package br.com.airton;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import br.com.airton.domain.Cidade;
 import br.com.airton.domain.Cliente;
 import br.com.airton.domain.Endereco;
 import br.com.airton.domain.Estado;
+import br.com.airton.domain.Pagamento;
+import br.com.airton.domain.PagamentoComBoleto;
+import br.com.airton.domain.PagamentoComCartao;
+import br.com.airton.domain.Pedido;
 import br.com.airton.domain.Produto;
+import br.com.airton.domain.enums.EstadoPagamento;
 import br.com.airton.domain.enums.TipoCliente;
 import br.com.airton.repository.CategoriaRepository;
 import br.com.airton.repository.CidadeRepository;
 import br.com.airton.repository.ClienteRepository;
 import br.com.airton.repository.EnderecoRepository;
 import br.com.airton.repository.EstadoRepository;
+import br.com.airton.repository.PagamentoRepository;
+import br.com.airton.repository.PedidoRepository;
 import br.com.airton.repository.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class Springrestjwth2Application implements CommandLineRunner{
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Springrestjwth2Application.class, args);
@@ -81,7 +93,20 @@ public class Springrestjwth2Application implements CommandLineRunner{
 	
 		clienteRepository.save(cli1);
 		enderecoRepository.saveAll(Arrays.asList(end1,end2));
-	
+
+		Pedido ped1 = new Pedido(null, LocalDateTime.of(2017, 9, 30, 10, 32) , cli1, end1);
+		Pedido ped2 = new Pedido(null, LocalDateTime.of(2017, 10, 10, 19, 35) , cli1, end2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, LocalDateTime.of(2017, 10, 20, 00, 00), null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 	}
 
 }
