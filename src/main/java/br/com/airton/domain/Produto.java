@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -30,7 +29,8 @@ public class Produto implements Serializable {
 	
 	//indica que o json deve exibir esta variavel utilizando a referencia
 	//with @JsonManagedReference + @JsonBackReference we will get Info referance there
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name="PRODUTO_CATEGORIA",
 		joinColumns= @JoinColumn(name="produto_id"),
